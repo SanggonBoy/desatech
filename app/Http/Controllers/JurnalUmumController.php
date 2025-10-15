@@ -21,8 +21,11 @@ class JurnalUmumController extends Controller
                 ->whereYear('tanggal', $tahun);
         }
 
+        $totalDebit = $query->sum('debit');
+        $totalKredit = $query->sum('kredit');
+
         $jurnals = $query->paginate(50);
 
-        return view('jurnal-umum.index', compact('jurnals'));
+        return view('jurnal-umum.index', compact('jurnals', 'totalDebit', 'totalKredit'));
     }
 }

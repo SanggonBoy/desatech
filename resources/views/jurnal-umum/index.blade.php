@@ -22,6 +22,25 @@
             padding: 15px;
             margin-bottom: 20px;
         }
+
+        /* Fix pagination arrow size */
+        .pagination .page-link {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .pagination .page-link:not(:has(svg)) {
+            font-size: 1rem !important;
+        }
+
+        .pagination svg {
+            display: none;
+        }
+
+        .pagination .page-link::before {
+            font-size: 1rem;
+        }
     </style>
 @endsection
 
@@ -101,16 +120,11 @@
                         </thead>
                         <tbody>
                             @php
-                                $totalDebit = 0;
-                                $totalKredit = 0;
                                 $currentRef = null;
                             @endphp
 
                             @forelse ($jurnals as $jurnal)
                                 @php
-                                    $totalDebit += $jurnal->debit;
-                                    $totalKredit += $jurnal->kredit;
-
                                     // Cek apakah ini referensi baru
                                     $isNewRef = $currentRef !== $jurnal->no_referensi;
                                     $currentRef = $jurnal->no_referensi;
@@ -193,11 +207,13 @@
                 <!-- Pagination -->
                 <div class="d-flex justify-content-between align-items-center mt-3">
                     <div>
-                        Menampilkan {{ $jurnals->firstItem() ?? 0 }} - {{ $jurnals->lastItem() ?? 0 }} dari
-                        {{ $jurnals->total() }} data
+                        <p class="mb-0 text-muted">
+                            Menampilkan {{ $jurnals->firstItem() ?? 0 }} - {{ $jurnals->lastItem() ?? 0 }} dari
+                            {{ $jurnals->total() }} data
+                        </p>
                     </div>
                     <div>
-                        {{ $jurnals->appends(request()->query())->links() }}
+                        {{ $jurnals->appends(request()->query())->links('vendor.pagination.custom') }}
                     </div>
                 </div>
 
